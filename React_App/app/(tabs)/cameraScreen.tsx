@@ -7,8 +7,8 @@ interface CameraScreenProps {
 }
 
 const CameraScreen: React.FC<CameraScreenProps> = ({ onClose }) => {
-  const [hasPermission, setHasPermission] = useState(false);
-  const cameraRef = useRef<Camera | null>(null);
+  const [hasPermission, setHasPermission] = useState<boolean>(false);
+  const cameraRef = useRef<React.RefObject<typeof Camera>>(null);
 
   // Request camera permissions on mount
   useEffect(() => {
@@ -36,7 +36,7 @@ const CameraScreen: React.FC<CameraScreenProps> = ({ onClose }) => {
       onRequestClose={onClose}
     >
       <View style={styles.camera}>
-        <Camera style={styles.camera} ref={cameraRef}>
+        <Camera style={styles.camera} ref={cameraRef as any}>
           {/* Camera controls */}
           <View style={styles.cameraControls}>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
