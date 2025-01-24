@@ -1,10 +1,12 @@
+// BottomNavBar.tsx
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-
+import CameraScreen from "./cameraScreen"; // Import CameraScreen component
 
 const BottomNavBar: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Search");
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
 
   const tabs = [
     { name: "Home", icon: "home-outline" },
@@ -12,13 +14,24 @@ const BottomNavBar: React.FC = () => {
     { name: "Community", icon: "people-outline" },
   ];
 
+  const handleTabPress = (tabName: string) => {
+    setActiveTab(tabName);
+    if (tabName === "Camera") {
+      setIsCameraOpen(true); // Open the camera when Camera tab is clicked
+    }
+  };
+
+  const handleCloseCamera = () => {
+    setIsCameraOpen(false); // Close the camera screen
+  };
+
   return (
     <View style={styles.container}>
       {tabs.map((tab) => (
         <TouchableOpacity
           key={tab.name}
           style={styles.tab}
-          onPress={() => setActiveTab(tab.name)}
+          onPress={() => handleTabPress(tab.name)}
         >
           <View style={styles.iconContainer}>
             <Icon
@@ -37,6 +50,9 @@ const BottomNavBar: React.FC = () => {
           </Text>
         </TouchableOpacity>
       ))}
+
+      {/* Show Camera Screen when the Camera tab is active */}
+      {isCameraOpen && <CameraScreen onClose={handleCloseCamera} />}
     </View>
   );
 };
