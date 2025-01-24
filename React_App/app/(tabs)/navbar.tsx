@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import ExplorePage from "./explorePage";
+import BooksPage from "./books/BookPage";
+import LeaderboardPage from "./leaderboard/LeaderboardPage"; // Import LeaderboardPage
 
 const BottomNavBar: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Explore"); // Default tab is "Explore"
@@ -19,11 +21,15 @@ const BottomNavBar: React.FC = () => {
       {/* Conditional rendering based on activeTab */}
       <View style={{ flex: 1 }}>
         {activeTab === "Explore" && <ExplorePage />}
-        {activeTab !== "Explore" && (
-          <View style={styles.placeholder}>
-            <Text style={styles.placeholderText}>{activeTab} Page</Text>
-          </View>
-        )}
+        {activeTab === "Books" && <BooksPage />}
+        {activeTab === "Leaderboard" && <LeaderboardPage />}
+        {activeTab !== "Explore" &&
+          activeTab !== "Books" &&
+          activeTab !== "Leaderboard" && (
+            <View style={styles.placeholder}>
+              <Text style={styles.placeholderText}>{activeTab} Page</Text>
+            </View>
+          )}
       </View>
 
       {/* Bottom Navigation Bar */}

@@ -2,45 +2,49 @@ import React, { useState } from "react";
 import { View, Text, Image, FlatList, StyleSheet, Dimensions, TouchableOpacity, Modal } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import ItemDetail from "./ItemDetail";
-import AddItemForm from "./AddItemForm"; // Import the form component
+import AddItemForm from "./AddItemForm"
 
 const dummyData = [
-  {
-    id: "1",
-    title: "Beautiful Sunset",
-    thumbnail: "https://via.placeholder.com/150/FF7F50",
-    description: "A breathtaking sunset at the beach.",
-    images: [
-      "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQiX1vaoWWbfHRBS-iVYzwFNgUJ7WcjzO_GBXufRHoRW4bi9YLS-YZnZmBx1CXzQSGXkIJEZozD_P-YOUrijreo5Q",
-      "https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg",
-    ],
-    videoLink: "https://www.example.com/video1",
-  },
-  {
-    id: "2",
-    title: "Mountain View",
-    thumbnail: "https://via.placeholder.com/150/6495ED",
-    description: "A beautiful view from the mountain top.",
-    images: [
-      "https://via.placeholder.com/500/6495ED",
-      "https://via.placeholder.com/500/228B22",
-      "https://via.placeholder.com/500/DC143C",
-    ],
-    videoLink: "https://www.example.com/video2",
-  },
-  {
-    id: "3",
-    title: "Mountain View",
-    thumbnail: "https://via.placeholder.com/150/6495ED",
-    description: "A beautiful view from the mountain top.",
-    images: [
-      "https://via.placeholder.com/500/6495ED",
-      "https://via.placeholder.com/500/228B22",
-      "https://via.placeholder.com/500/DC143C",
-    ],
-    videoLink: "https://www.example.com/video2",
-  },
-];
+    {
+      id: "1",
+      title: "Beautiful Sunset",
+      thumbnail: "https://via.placeholder.com/150/FF7F50",
+      description: "A breathtaking sunset at the beach.",
+      images: [
+        "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQiX1vaoWWbfHRBS-iVYzwFNgUJ7WcjzO_GBXufRHoRW4bi9YLS-YZnZmBx1CXzQSGXkIJEZozD_P-YOUrijreo5Q",
+        "https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg",
+      ],
+      videoLink: "https://www.example.com/video1",
+      username: "johndoe",
+    },
+    {
+      id: "2",
+      title: "Mountain View",
+      thumbnail: "https://via.placeholder.com/150/6495ED",
+      description: "A beautiful view from the mountain top.",
+      images: [
+        "https://via.placeholder.com/500/6495ED",
+        "https://via.placeholder.com/500/228B22",
+        "https://via.placeholder.com/500/DC143C",
+      ],
+      videoLink: "https://www.example.com/video2",
+      username: "janedoe", // Added username
+    },
+    {
+      id: "3",
+      title: "Forest Adventure",
+      thumbnail: "https://via.placeholder.com/150/228B22",
+      description: "Explore the lush green forests.",
+      images: [
+        "https://via.placeholder.com/500/228B22",
+        "https://via.placeholder.com/500/DC143C",
+        "https://via.placeholder.com/500/6495ED",
+      ],
+      videoLink: "https://www.example.com/video3",
+      username: "naturelover", // Added username
+    },
+  ];
+  
 
 const ExplorePage: React.FC = () => {
   const [likedItems, setLikedItems] = useState<{ [key: string]: boolean }>({});

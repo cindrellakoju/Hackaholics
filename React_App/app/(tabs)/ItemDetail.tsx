@@ -1,16 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, BackHandler, Dimensions } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Ionicons";
 
 interface ItemDetailProps {
-  item: any;
+  item: {
+    title: string;
+    images: string[];
+    videoLink: string;
+    description: string;
+    username: string;
+  };
 }
 
 const ItemDetail: React.FC<ItemDetailProps> = ({ item }) => {
   const navigation = useNavigation();
   const screenWidth = Dimensions.get("window").width;
   const screenHeight = Dimensions.get("window").height;
+
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(10); // Default like count (can be dynamic)
 
   useEffect(() => {
     const backAction = () => {
@@ -24,6 +33,11 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ item }) => {
       BackHandler.removeEventListener("hardwareBackPress", backAction);
     };
   }, [navigation]);
+
+  const handleLike = () => {
+    setLiked(!liked);
+    setLikeCount((prevCount) => (liked ? prevCount - 1 : prevCount + 1));
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -48,11 +62,14 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ item }) => {
 
       {/* Like Button & Like Count */}
       <View style={styles.likeContainer}>
-        <TouchableOpacity style={styles.heartIcon}>
-          <Icon name="heart" size={30} color="red" />
+        <TouchableOpacity style={styles.heartIcon} onPress={handleLike}>
+          <Icon name="heart" size={30} color={liked ? "red" : "gray"} />
         </TouchableOpacity>
-        <Text style={styles.likeCount}>10 Likes</Text>
+        <Text style={styles.likeCount}>{likeCount} Likes</Text>
       </View>
+
+      {/* Username */}
+      <Text style={styles.username}>Posted by: {item.username}</Text>
 
       {/* Video Link */}
       <Text style={styles.videoLink}>
@@ -80,12 +97,11 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     marginBottom: 16,
-    
   },
   likeContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 16,
+    marginBottom: 8,
     marginTop: -10,
   },
   heartIcon: {
@@ -95,6 +111,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     marginLeft: 10,
+  },
+  username: {
+    fontSize: 14,
+    fontStyle: "italic",
+    color: "#555",
+    marginBottom: 16,
   },
   videoLink: {
     marginVertical: 16,
