@@ -1,9 +1,43 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, FlatList, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons'; // Import the icon library
+import { useNavigation } from '@react-navigation/native'; // Import navigation hook
+import { StackNavigationProp } from '@react-navigation/stack'; // Import navigation prop type
+import { RootStackParamList } from './type'; // Import navigation types
+import { StackActions } from '@react-navigation/stack';
+
+
+interface Work {
+  imageUri: string;
+  title: string;
+}
+
+const works: Work[] = [
+  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'Nature' },
+  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'My Art' },
+  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'People' },
+  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'Nature' },
+  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'My Art' },
+  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'People' },
+];
 
 const UserInfo = () => {
+  // Define navigation type for this screen
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'UserInfo'>>();
+
+  const handleSettingsPress = () => {
+    navigation.dispatch(StackActions.push('Settings')); // Navigate to Settings screen
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {/* Settings Button at the top right */}
+      <View style={styles.settingsContainer}>
+      <TouchableOpacity onPress={handleSettingsPress} style={{ paddingRight: 10 }}>
+  <Icon name="settings-outline" size={30} color="black" />
+</TouchableOpacity>
+      </View>
+
       {/* Header Section */}
       <View style={styles.header}>
         <Image
@@ -16,55 +50,46 @@ const UserInfo = () => {
           Hi, my name is Carol and I love photography! It's my greatest passion in life.
         </Text>
       </View>
-   {/* Stats Section */}
-   <View style={styles.statsContainer}>
+
+      {/* Stats Section */}
+      <View style={styles.statsContainer}>
         <View style={styles.statItem}>
-          <Text style={styles.statNumber}>15k</Text>
-          <Text style={styles.statLabel}>Likes ❤️</Text>
+          <Text style={styles.statNumber}>❤️ 15k </Text>
         </View>
       </View>
 
       {/* My Works Section */}
-      <Text style={styles.sectionTitle}>My Works</Text>
-      <View style={styles.worksContainer}>
-        <View style={styles.workItem}>
-          <Image
-            source={{ uri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg' }} // Replace with actual image URL
-            style={styles.workImage}
-            />
-          <Text style={styles.imageTitle}>Nature</Text>
-        </View>
-        <View style={styles.workItem}>
-          <Image
-            source={{ uri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg' }} // Replace with actual image URL
-            style={styles.workImage}
-            />
-          <Text style={styles.imageTitle}>My Art</Text>
-        </View>
-        <View style={styles.workItem}>
-          <Image
-            source={{ uri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg' }} // Replace with actual image URL
-            style={styles.workImage}
-          />
-          <Text style={styles.imageTitle}>People</Text>
-        </View>
-        {/* <View style={styles.workItem}>
-          <Image
-            source={{ uri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg' }} // Replace with actual image URL
-            style={styles.workImage}
-          />
-          <Text style={styles.imageTitle}>People</Text>
-        </View> */}
-      </View>
+      <Text style={styles.sectionTitle}>My Crafts</Text>
+
+      <FlatList
+        data={works}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.workItem}>
+            <Image source={{ uri: item.imageUri }} style={styles.workImage} />
+            <Text style={styles.imageTitle}>{item.title}</Text>
+          </View>
+        )}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.worksContainer}
+      />
     </ScrollView>
   );
 };
 
+// Styles (same as in your code)
 const styles = StyleSheet.create({
   container: {
     padding: 30,
     paddingTop: 90,
     backgroundColor: '#fff',
+  },
+  settingsContainer: {
+    position: 'absolute',
+    top: 40,
+    right: 20,
+    zIndex: 1,
   },
   header: {
     alignItems: 'center',
@@ -88,27 +113,6 @@ const styles = StyleSheet.create({
     color: 'gray',
     marginTop: 10,
   },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-  },
-  followButton: {
-    backgroundColor: '#FF6F61',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-  },
-  messageButton: {
-    backgroundColor: '#FF6F61',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -121,9 +125,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  statLabel: {
-    color: 'gray',
-  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -135,8 +136,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   workItem: {
-    // alignItems: 'center',
-    width: 120,
+    width: 150,
+    marginRight: 10,
   },
   workImage: {
     width: 150,
@@ -145,18 +146,9 @@ const styles = StyleSheet.create({
   },
   imageTitle: {
     marginTop: 5,
-    fontSize: 18,
-    fontWeight: "bold",
-    color: 'gray',
-  },
-  socialMediaContainer: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  socialLink: {
     fontSize: 16,
-    color: '#FF6F61',
-    marginVertical: 5,
+    fontWeight: 'bold',
+    color: 'gray',
   },
 });
 

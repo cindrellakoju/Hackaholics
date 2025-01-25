@@ -8,7 +8,7 @@ const dummyData = [
     {
       id: "1",
       title: "Beautiful Sunset",
-      thumbnail: "https://via.placeholder.com/150/FF7F50",
+      thumbnail: "https://i.pinimg.com/736x/56/83/d3/5683d38a27a38b270866c4c0441f1006.jpg",
       description: "A breathtaking sunset at the beach.",
       images: [
         "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQiX1vaoWWbfHRBS-iVYzwFNgUJ7WcjzO_GBXufRHoRW4bi9YLS-YZnZmBx1CXzQSGXkIJEZozD_P-YOUrijreo5Q",
@@ -94,7 +94,7 @@ const ExplorePage: React.FC = () => {
             onRequestClose={() => setIsFormVisible(false)} // Close modal on request
           >
             <AddItemForm
-              onClose={() => setIsFormVisible(false)} // Close modal on form submission or cancel
+              onClose={() => setIsFormVisible(false)}  onAddItem={() => setIsFormVisible(false)}// Close modal on form submission or cancel
             />
           </Modal>
         </>
