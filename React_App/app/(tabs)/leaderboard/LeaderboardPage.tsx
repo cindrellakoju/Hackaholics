@@ -19,15 +19,16 @@ const LeaderboardPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://localhost:3000/getUsersWithLikes'); // Replace with actual API endpoint
+        const response = await fetch('http://localhost:3000/getUsersWithLikes'); // Replace with actual API endpoint
         const data = await response.json();
+        console.log(data);
         if (data.success) {
           // Assuming the API response contains the users' data
           const fetchedUsers = data.data.map((user: any) => ({
             id: String(user.user_id),
-            name: user.title, // Assuming the title corresponds to the user's name
-            likes: user.likes,
-            like_count: user.like_count,
+            name: user.name,
+            likes: user.total_likes,
+            like_count: user.total_likes,
           }));
           setUsers(fetchedUsers);
         }
@@ -43,6 +44,7 @@ const LeaderboardPage: React.FC = () => {
 
   // Sort users by likes in increasing order
   const sortedUsers = users.sort((a, b) => b.like_count - a.like_count);
+  console.log(sortedUsers);
 
   if (loading) {
     return <Text>Loading...</Text>; // Loading state while fetching data

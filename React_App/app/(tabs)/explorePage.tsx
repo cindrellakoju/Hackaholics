@@ -1,17 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, FlatList, StyleSheet, Dimensions, TouchableOpacity, Modal, ActivityIndicator } from "react-native";
+import { 
+  View, 
+  Text, 
+  Image, 
+  FlatList, 
+  StyleSheet, 
+  Dimensions, 
+  TouchableOpacity, 
+  Modal, 
+  ActivityIndicator, 
+  SafeAreaView 
+} from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import Constants from "expo-constants"; // Import Constants
+import Constants from "expo-constants"; 
 import axios from "axios";
 import ItemDetail from "./ItemDetail";
 import AddItemForm from "./AddItemForm";
 
 const ExplorePage: React.FC = () => {
-  const [data, setData] = useState<any[]>([]); // To store fetched data
+  const [rdata, setRdata] = useState<any[]>([]);  // To store fetched data
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState<string | null>(null); // Error state
-  const [likedItems, setLikedItems] = useState<{ [key: string]: boolean }>({});
-  const [selectedItem, setSelectedItem] = useState<any>(null);
+  const [likedItems, setLikedItems] = useState<{ [key: string]: boolean }>({}); // Track liked items
+  const [selectedItem, setSelectedItem] = useState<any>(null); // Track selected item
   const [isFormVisible, setIsFormVisible] = useState(false); // Track form visibility
 
   const BASE_URL = Constants.manifest?.extra?.BASE_URL; // Access BASE_URL from manifest
@@ -19,9 +30,13 @@ const ExplorePage: React.FC = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/getAllPosts`); // Fetch data from backend
-        setData(response.data); // Assuming the API returns an array of posts
-        console.log(response.data);
+        const response = await axios.get(`${BASE_URL}/getAllPosts`);
+        // Ensure response is in expected format
+        if (Array.isArray(response.data.data)) {
+          setRdata(response.data.data);
+        } else {
+          throw new Error("Unexpected data format from API");
+        }
         setLoading(false);
       } catch (err: any) {
         setError(err.message || "Something went wrong");
@@ -41,11 +56,29 @@ const ExplorePage: React.FC = () => {
       style={styles.thumbnailContainer}
       onPress={() => setSelectedItem(item)}
     >
-      <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
-      <TouchableOpacity style={styles.heartIcon} onPress={() => toggleLike(item.id)}>
-        <Icon name={likedItems[item.id] ? "heart" : "heart-outline"} size={24} color={likedItems[item.id] ? "red" : "#FFF"} />
+      {item?.images?.[0]?.image_url ? (
+        <>
+        <Image
+          source={{ uri: `http://localhost:3000/uploads/${item.images[0].image_url}` }}
+          style={styles.thumbnail}
+        />
+        </>
+      ) : (
+        <View style={[styles.thumbnail, styles.missingImage]}>
+          <Text style={styles.missingImageText}>No Image</Text>
+        </View>
+      )}
+      <TouchableOpacity
+        style={styles.heartIcon}
+        onPress={() => toggleLike(item.post_id)}
+      >
+        <Icon
+          name={likedItems[item.post_id] ? "heart" : "heart-outline"}
+          size={24}
+          color={likedItems[item.post_id] ? "red" : "#FFF"}
+        />
       </TouchableOpacity>
-      <Text style={styles.thumbnailTitle}>{item.title}</Text>
+      <Text style={styles.thumbnailTitle}>{item.title || "Untitled"}</Text>
     </TouchableOpacity>
   );
 
@@ -67,38 +100,41 @@ const ExplorePage: React.FC = () => {
   }
 
   return (
-    <View style={styles.container}>
-      {selectedItem ? (
-        <ItemDetail item={selectedItem} />
-      ) : (
-        <>
-          <FlatList
-            data={data}
-            renderItem={renderThumbnail}
-            keyExtractor={(item) => item.postid.toString()}
-            numColumns={2}
-            showsVerticalScrollIndicator={false}
-          />
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => setIsFormVisible(true)} // Open form modal
-          >
-            <Icon name="add" size={30} color="#FFF" />
-          </TouchableOpacity>
-          <Modal
-            visible={isFormVisible}
-            transparent={false}
-            animationType="slide"
-            onRequestClose={() => setIsFormVisible(false)} // Close modal on request
-          >
-            <AddItemForm
-              onClose={() => setIsFormVisible(false)}
-              onAddItem={() => setIsFormVisible(false)} // Close modal on form submission or cancel
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        {selectedItem ? (
+          <ItemDetail item={selectedItem} />
+        ) : (
+          <>
+            <FlatList
+              data={rdata}
+              renderItem={renderThumbnail}
+              keyExtractor={(item) => item.post_id.toString()}
+              numColumns={2}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.flatListContainer}
             />
-          </Modal>
-        </>
-      )}
-    </View>
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={() => setIsFormVisible(true)} // Open form modal
+            >
+              <Icon name="add" size={30} color="#FFF" />
+            </TouchableOpacity>
+            <Modal
+              visible={isFormVisible}
+              transparent={false}
+              animationType="slide"
+              onRequestClose={() => setIsFormVisible(false)} // Close modal on request
+            >
+              <AddItemForm
+                onClose={() => setIsFormVisible(false)}
+                onAddItem={() => setIsFormVisible(false)} // Close modal on form submission or cancel
+              />
+            </Modal>
+          </>
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -158,6 +194,9 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
   },
+  flatListContainer: {
+    paddingBottom: 60, // Adjust as needed for bottom spacing
+  },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
@@ -167,6 +206,15 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  missingImage: {
+    backgroundColor: "#DDD",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  missingImageText: {
+    color: "#666",
+    fontSize: 12,
   },
 });
 
