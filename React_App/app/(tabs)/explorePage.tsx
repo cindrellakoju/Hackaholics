@@ -21,6 +21,7 @@ const ExplorePage: React.FC = () => {
       try {
         const response = await axios.get(`${BASE_URL}/getAllPosts`); // Fetch data from backend
         setData(response.data); // Assuming the API returns an array of posts
+        console.log(response.data);
         setLoading(false);
       } catch (err: any) {
         setError(err.message || "Something went wrong");
@@ -74,7 +75,7 @@ const ExplorePage: React.FC = () => {
           <FlatList
             data={data}
             renderItem={renderThumbnail}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item.postid.toString()}
             numColumns={2}
             showsVerticalScrollIndicator={false}
           />

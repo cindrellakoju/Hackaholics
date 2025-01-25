@@ -28,14 +28,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         },
         body: JSON.stringify({ email, password }),
       });
-
-      const data = await response.json();
-      console.log('Data:', data);
-
-      
+      const data = await response.json();      
       if (response.ok) {
         Alert.alert('Success', `Welcome back, ${data.user.name}!`);
-        console.log('User data:', data);
         if (onLogin) {
           onLogin(); // Call the onLogin callback if provided
         }

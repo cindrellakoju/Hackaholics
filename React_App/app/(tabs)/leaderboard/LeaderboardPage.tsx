@@ -1,18 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
+// Define the type for the user data
+interface User {
+  id: string;
+  name: string;
+  likes: number[];
+  like_count: number;
+}
+
 const LeaderboardPage: React.FC = () => {
-  // Static user data
-  const users = [
-    { id: "1", name: "Alice", likes: 25 },
-    { id: "2", name: "Bob", likes: 10 },
-    { id: "3", name: "Charlie", likes: 15 },
-    { id: "4", name: "David", likes: 5 },
-  ];
+  // State for storing user data
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Fetch data from API when the component mounts
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://localhost:3000/getUsersWithLikes'); // Replace with actual API endpoint
+        const data = await response.json();
+        if (data.success) {
+          // Assuming the API response contains the users' data
+          const fetchedUsers = data.data.map((user: any) => ({
+            id: String(user.user_id),
+            name: user.title, // Assuming the title corresponds to the user's name
+            likes: user.likes,
+            like_count: user.like_count,
+          }));
+          setUsers(fetchedUsers);
+        }
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // Sort users by likes in increasing order
-  const sortedUsers = users.sort((a, b) => b.likes - a.likes);
+  const sortedUsers = users.sort((a, b) => b.like_count - a.like_count);
+
+  if (loading) {
+    return <Text>Loading...</Text>; // Loading state while fetching data
+  }
 
   return (
     <View style={styles.container}>
@@ -24,7 +58,7 @@ const LeaderboardPage: React.FC = () => {
           <View style={styles.card}>
             <Text style={styles.userName}>{item.name}</Text>
             <View style={styles.likeContainer}>
-              <Text style={styles.likes}>{item.likes}</Text>
+              <Text style={styles.likes}>{item.like_count}</Text>
               <Icon name="heart" size={20} color="red" style={styles.heartIcon} />
             </View>
           </View>

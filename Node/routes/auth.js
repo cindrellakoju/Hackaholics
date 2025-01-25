@@ -45,7 +45,7 @@ authRouter.post('/api/signup', async (req, res) => {
 authRouter.post('/api/signin', async (req, res) => {
     try {
         const { email, password } = req.body;
-
+        console.log(email, password);
         const userQuery = await client.query('SELECT * FROM users WHERE email = $1', [email]);
         const user = userQuery.rows[0];
 
