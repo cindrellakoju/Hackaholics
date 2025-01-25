@@ -1,163 +1,164 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState } from "react";
+import { View, Text, Image, FlatList, StyleSheet, Dimensions, TouchableOpacity, Modal } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
+import ItemDetail from "./ItemDetail";
+import AddItemForm from "./AddItemForm"
 
-const UserInfo = () => {
+const dummyData = [
+    {
+      id: "1",
+      title: "Beautiful Sunset",
+      thumbnail: "https://via.placeholder.com/150/FF7F50",
+      description: "A breathtaking sunset at the beach.",
+      images: [
+        "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQiX1vaoWWbfHRBS-iVYzwFNgUJ7WcjzO_GBXufRHoRW4bi9YLS-YZnZmBx1CXzQSGXkIJEZozD_P-YOUrijreo5Q",
+        "https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg",
+      ],
+      videoLink: "https://www.example.com/video1",
+      username: "johndoe",
+    },
+    {
+      id: "2",
+      title: "Mountain View",
+      thumbnail: "https://via.placeholder.com/150/6495ED",
+      description: "A beautiful view from the mountain top.",
+      images: [
+        "https://via.placeholder.com/500/6495ED",
+        "https://via.placeholder.com/500/228B22",
+        "https://via.placeholder.com/500/DC143C",
+      ],
+      videoLink: "https://www.example.com/video2",
+      username: "janedoe", // Added username
+    },
+    {
+      id: "3",
+      title: "Forest Adventure",
+      thumbnail: "https://via.placeholder.com/150/228B22",
+      description: "Explore the lush green forests.",
+      images: [
+        "https://via.placeholder.com/500/228B22",
+        "https://via.placeholder.com/500/DC143C",
+        "https://via.placeholder.com/500/6495ED",
+      ],
+      videoLink: "https://www.example.com/video3",
+      username: "naturelover", // Added username
+    },
+  ];
+  
+
+const ExplorePage: React.FC = () => {
+  const [likedItems, setLikedItems] = useState<{ [key: string]: boolean }>({});
+  const [selectedItem, setSelectedItem] = useState<any>(null);
+  const [isFormVisible, setIsFormVisible] = useState(false); // Track form visibility
+
+  const toggleLike = (id: string) => {
+    setLikedItems((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const renderThumbnail = ({ item }: { item: any }) => (
+    <TouchableOpacity
+      style={styles.thumbnailContainer}
+      onPress={() => setSelectedItem(item)}
+    >
+      <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
+      <TouchableOpacity style={styles.heartIcon} onPress={() => toggleLike(item.id)}>
+        <Icon name={likedItems[item.id] ? "heart" : "heart-outline"} size={24} color={likedItems[item.id] ? "red" : "#FFF"} />
+      </TouchableOpacity>
+      <Text style={styles.thumbnailTitle}>{item.title}</Text>
+    </TouchableOpacity>
+  );
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Header Section */}
-      <View style={styles.header}>
-        <Image
-          source={{ uri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg' }} // Replace with actual image URL
-          style={styles.profileImage}
-        />
-        <Text style={styles.name}>Caroline Steele</Text>
-        <Text style={styles.subtitle}>Photographer and Artist</Text>
-        <Text style={styles.description}>
-          Hi, my name is Carol and I love photography! It's my greatest passion in life.
-        </Text>
-      </View>
-   {/* Stats Section */}
-   <View style={styles.statsContainer}>
-        <View style={styles.statItem}>
-          <Text style={styles.statNumber}>15k</Text>
-          <Text style={styles.statLabel}>Likes ❤️</Text>
-        </View>
-      </View>
-
-      {/* My Works Section */}
-      <Text style={styles.sectionTitle}>My Works</Text>
-      <View style={styles.worksContainer}>
-        <View style={styles.workItem}>
-          <Image
-            source={{ uri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg' }} // Replace with actual image URL
-            style={styles.workImage}
-            />
-          <Text style={styles.imageTitle}>Nature</Text>
-        </View>
-        <View style={styles.workItem}>
-          <Image
-            source={{ uri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg' }} // Replace with actual image URL
-            style={styles.workImage}
-            />
-          <Text style={styles.imageTitle}>My Art</Text>
-        </View>
-        <View style={styles.workItem}>
-          <Image
-            source={{ uri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg' }} // Replace with actual image URL
-            style={styles.workImage}
+    <View style={styles.container}>
+      {selectedItem ? (
+        <ItemDetail item={selectedItem} />
+      ) : (
+        <>
+          <FlatList
+            data={dummyData}
+            renderItem={renderThumbnail}
+            keyExtractor={(item) => item.id}
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
           />
-          <Text style={styles.imageTitle}>People</Text>
-        </View>
-        {/* <View style={styles.workItem}>
-          <Image
-            source={{ uri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg' }} // Replace with actual image URL
-            style={styles.workImage}
-          />
-          <Text style={styles.imageTitle}>People</Text>
-        </View> */}
-      </View>
-    </ScrollView>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => setIsFormVisible(true)} // Open form modal
+          >
+            <Icon name="add" size={30} color="#FFF" />
+          </TouchableOpacity>
+          <Modal
+            visible={isFormVisible}
+            transparent={false}
+            animationType="slide"
+            onRequestClose={() => setIsFormVisible(false)} // Close modal on request
+          >
+            <AddItemForm
+              onClose={() => setIsFormVisible(false)} // Close modal on form submission or cancel
+            />
+          </Modal>
+        </>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 30,
-    paddingTop: 90,
-    backgroundColor: '#fff',
+    flex: 1,
+    backgroundColor: "#F9F9F9",
+    paddingHorizontal: 8,
+    paddingTop: 10,
   },
-  header: {
-    alignItems: 'center',
+  thumbnailContainer: {
+    flex: 1,
+    margin: 8,
+    backgroundColor: "#FFF",
+    borderRadius: 12,
+    overflow: "hidden",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    position: "relative",
   },
-  profileImage: {
-    width: 140,
-    height: 140,
-    borderRadius: 80,
-    marginBottom: 10,
+  thumbnail: {
+    width: "100%",
+    height: Dimensions.get("window").width / 2.5,
+    resizeMode: "cover",
   },
-  name: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: 'gray',
-  },
-  description: {
-    textAlign: 'center',
-    color: 'gray',
-    marginTop: 10,
-  },
-  buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-  },
-  followButton: {
-    backgroundColor: '#FF6F61',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+  heartIcon: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     borderRadius: 20,
+    padding: 5,
   },
-  messageButton: {
-    backgroundColor: '#FF6F61',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 20,
-  },
-  statItem: {
-    alignItems: 'center',
-  },
-  statNumber: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  statLabel: {
-    color: 'gray',
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginTop: 30,
-  },
-  worksContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  workItem: {
-    // alignItems: 'center',
-    width: 120,
-  },
-  workImage: {
-    width: 150,
-    height: 220,
-    borderRadius: 10,
-  },
-  imageTitle: {
-    marginTop: 5,
-    fontSize: 18,
+  thumbnailTitle: {
+    padding: 8,
+    fontSize: 14,
+    color: "#333",
     fontWeight: "bold",
-    color: 'gray',
+    textAlign: "center",
   },
-  socialMediaContainer: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  socialLink: {
-    fontSize: 16,
-    color: '#FF6F61',
-    marginVertical: 5,
+  addButton: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#007BFF",
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
   },
 });
 
-export default UserInfo;
+export default ExplorePage;
