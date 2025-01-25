@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const client = require('./databasepg');
 const authRouter = require("./routes/auth");
+const postRouter = require("./routes/post");
 
 const PORT = process.env.PORT || 3000;
 const HOST = '172.16.6.44';
