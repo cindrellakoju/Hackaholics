@@ -28,9 +28,9 @@ const UserInfo = () => {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Settings Button at the top right */}
       <View style={styles.settingsContainer}>
-        <TouchableOpacity onPress={handleSettingsPress}>
-          <Icon name="settings-outline" size={30} color="black" paddingRight={10} /> {/* Settings icon */}
-        </TouchableOpacity>
+      <TouchableOpacity onPress={handleSettingsPress} style={{ paddingRight: 10 }}>
+  <Icon name="settings-outline" size={30} color="black" />
+</TouchableOpacity>
       </View>
 
       {/* Conditionally render the Settings component */}
