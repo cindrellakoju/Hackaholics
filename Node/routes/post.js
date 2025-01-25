@@ -159,4 +159,114 @@ router.get('/getPost/:post_id', async (req, res) => {
 });
 
 
+router.get('/getUsersWithLikes', async (req, res) => {
+  try {
+    const usersWithLikesQuery = `
+      SELECT 
+          u.id AS user_id, 
+          u.name, 
+          COALESCE(SUM(CASE WHEN p.likes IS NOT NULL THEN array_length(p.likes, 1) ELSE 0 END), 0) AS total_likes
+      FROM 
+          users u
+      LEFT JOIN 
+          posts p ON u.id = p.user_id
+      GROUP BY 
+          u.id
+      ORDER BY 
+          u.name;
+    `;
+
+    const result = await pool.query(usersWithLikesQuery);
+    const users = result.rows;
+
+    res.status(200).json({
+      success: true,
+      data: users,
+    });
+  } catch (err) {
+    console.error('Error retrieving users with likes:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+router.post('/search', async (req, res) => {
+  const { searchString } = req.body;
+
+  console.log('Received search string:', searchString); 
+
+  if (!searchString) {
+    return res.status(400).json({ error: 'Search string is required' });
+  }
+
+  try {
+    const query = `
+      SELECT id
+      FROM posts
+      WHERE title ILIKE $1 OR description ILIKE $1
+    `;
+    const values = [`%${searchString}%`];
+
+    const result = await pool.query(query, values);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'No matching posts found' });
+    }
+
+    const postIds = result.rows.map(row => row.id);
+    console.log('Returning the posts',postIds);
+    res.json({ post_ids: postIds });
+  } catch (err) {
+    console.error('Error searching posts:', err.message); 
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+router.get('/instruction/:objectName', async (req, res) => {
+  const objectName = req.params.objectName; 
+
+  try {
+    const query = 'SELECT instruction, problem FROM instructions WHERE object_name = $1';
+
+    const result = await pool.query(query, [objectName]);
+
+    if (result.rows.length > 0) {
+
+      res.status(200).json({
+        instruction: result.rows[0].instruction,
+        problem: result.rows[0].problem, 
+      });
+    } else {
+      console.log('No object');
+      res.status(404).json({ message: 'No instruction found for the given object name.' });
+    }
+  } catch (error) {
+    console.error('Error executing query', error.stack);
+    res.status(500).json({ error: 'An error occurred while fetching the instruction.' });
+  }
+});
+
+
+router.get('/tags/:objectName', async (req, res) => {
+  const objectName = req.params.objectName;
+
+  try {
+    const query = 'SELECT tags FROM web WHERE object_name = $1';
+    const result = await pool.query(query, [objectName]);
+
+    if (result.rows.length > 0) {
+      res.status(200).json({
+        tags: result.rows[0].tags,
+      });
+    } else {
+      res.status(404).json({ message: 'No tags found for the given object name.' });
+    }
+  } catch (error) {
+    console.error('Error executing query', error.stack);
+    res.status(500).json({ error: 'An error occurred while fetching the tags.' });
+  }
+});
+
+
 module.exports = router;
