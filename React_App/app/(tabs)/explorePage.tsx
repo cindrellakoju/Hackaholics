@@ -1,56 +1,35 @@
-import React, { useState } from "react";
-import { View, Text, Image, FlatList, StyleSheet, Dimensions, TouchableOpacity, Modal } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, FlatList, StyleSheet, Dimensions, TouchableOpacity, Modal, ActivityIndicator } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import ItemDetail from "./ItemDetail";
-import AddItemForm from "./AddItemForm"
+import Constants from "expo-constants"; // Import Constants
 import axios from "axios";
-
-const dummyData = [
-    {
-      id: "1",
-      title: "Beautiful Sunset",
-      thumbnail: "https://i.pinimg.com/736x/56/83/d3/5683d38a27a38b270866c4c0441f1006.jpg",
-      description: "A breathtaking sunset at the beach.",
-      images: [
-        "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQiX1vaoWWbfHRBS-iVYzwFNgUJ7WcjzO_GBXufRHoRW4bi9YLS-YZnZmBx1CXzQSGXkIJEZozD_P-YOUrijreo5Q",
-        "https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg",
-      ],
-      videoLink: "https://www.example.com/video1",
-      username: "johndoe",
-    },
-    {
-      id: "2",
-      title: "Mountain View",
-      thumbnail: "https://via.placeholder.com/150/6495ED",
-      description: "A beautiful view from the mountain top.",
-      images: [
-        "https://via.placeholder.com/500/6495ED",
-        "https://via.placeholder.com/500/228B22",
-        "https://via.placeholder.com/500/DC143C",
-      ],
-      videoLink: "https://www.example.com/video2",
-      username: "janedoe", // Added username
-    },
-    {
-      id: "3",
-      title: "Forest Adventure",
-      thumbnail: "https://via.placeholder.com/150/228B22",
-      description: "Explore the lush green forests.",
-      images: [
-        "https://via.placeholder.com/500/228B22",
-        "https://via.placeholder.com/500/DC143C",
-        "https://via.placeholder.com/500/6495ED",
-      ],
-      videoLink: "https://www.example.com/video3",
-      username: "naturelover", // Added username
-    },
-  ];
-  
+import ItemDetail from "./ItemDetail";
+import AddItemForm from "./AddItemForm";
 
 const ExplorePage: React.FC = () => {
+  const [data, setData] = useState<any[]>([]); // To store fetched data
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState<string | null>(null); // Error state
   const [likedItems, setLikedItems] = useState<{ [key: string]: boolean }>({});
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [isFormVisible, setIsFormVisible] = useState(false); // Track form visibility
+
+  const BASE_URL = Constants.manifest?.extra?.BASE_URL; // Access BASE_URL from manifest
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/getAllPosts`); // Fetch data from backend
+        setData(response.data); // Assuming the API returns an array of posts
+        setLoading(false);
+      } catch (err: any) {
+        setError(err.message || "Something went wrong");
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, [BASE_URL]);
 
   const toggleLike = (id: string) => {
     setLikedItems((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -69,6 +48,23 @@ const ExplorePage: React.FC = () => {
     </TouchableOpacity>
   );
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#007BFF" />
+        <Text>Loading posts...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text style={styles.errorText}>Error: {error}</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       {selectedItem ? (
@@ -76,9 +72,9 @@ const ExplorePage: React.FC = () => {
       ) : (
         <>
           <FlatList
-            data={dummyData}
+            data={data}
             renderItem={renderThumbnail}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
             numColumns={2}
             showsVerticalScrollIndicator={false}
           />
@@ -95,7 +91,8 @@ const ExplorePage: React.FC = () => {
             onRequestClose={() => setIsFormVisible(false)} // Close modal on request
           >
             <AddItemForm
-              onClose={() => setIsFormVisible(false)}  onAddItem={() => setIsFormVisible(false)}// Close modal on form submission or cancel
+              onClose={() => setIsFormVisible(false)}
+              onAddItem={() => setIsFormVisible(false)} // Close modal on form submission or cancel
             />
           </Modal>
         </>
@@ -159,6 +156,16 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorText: {
+    color: "red",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

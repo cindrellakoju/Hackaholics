@@ -3,32 +3,60 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } fro
 import Icon from 'react-native-vector-icons/MaterialIcons'; // For icons
 import Logo from "../images/logo.png";
 
+type LoginPageProps = {
+  onLogin?: () => void; // Define onLogin as an optional prop
+};
 
-const LoginPage = () => {
+const url = process.env.BASE_URL;
+
+const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false); // Toggle password visibility
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Error', 'Please fill in both fields.');
-    } else {
-      Alert.alert('Success', `Welcome, ${email}!`);
+      return;
+    }
+    try {
+      console.log("ddgsgd")
+      const response = await fetch(`http://localhost:3000/api/signin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+      console.log('Data:', data);
+
+      
+      if (response.ok) {
+        Alert.alert('Success', `Welcome back, ${data.user.name}!`);
+        console.log('User data:', data);
+        if (onLogin) {
+          onLogin(); // Call the onLogin callback if provided
+        }
+      } else {
+        Alert.alert('Error', data.msg || 'Invalid credentials.');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Something went wrong. Please try again later.');
+      console.error('Login error:', error);
     }
   };
 
   const handleSignUp = () => {
     Alert.alert('Sign Up', 'Redirecting to sign-up page...');
-    // Here, you would navigate to your Sign-Up page
   };
 
   return (
     <View style={styles.container}>
-      {/* Logo Section */}
       <Image source={Logo} style={styles.logo} />
       <Text style={styles.companyName}>JunkSewa</Text>
 
-      {/* Email Input */}
       <View style={styles.inputContainer}>
         <Icon name="email" size={24} color="#555" style={styles.icon} />
         <TextInput
@@ -41,7 +69,6 @@ const LoginPage = () => {
         />
       </View>
 
-      {/* Password Input */}
       <View style={styles.inputContainer}>
         <Icon name="lock" size={24} color="#555" style={styles.icon} />
         <TextInput
@@ -53,7 +80,7 @@ const LoginPage = () => {
         />
         <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
           <Icon
-            name={showPassword ? "visibility" : "visibility-off"}
+            name={showPassword ? 'visibility' : 'visibility-off'}
             size={24}
             color="#555"
             style={styles.icon}
@@ -61,12 +88,10 @@ const LoginPage = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Login Button */}
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
 
-      {/* Sign-Up Link */}
       <View style={styles.signUpContainer}>
         <Text style={styles.signUpText}>Don't have an account? </Text>
         <TouchableOpacity onPress={handleSignUp}>
@@ -115,7 +140,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: '100%',
-    fontSize: 18,   
+    fontSize: 18,
   },
   button: {
     width: '50%',
