@@ -38,4 +38,4 @@ yarn-error.*
 app-example
 
 # package
-package-lock.json
+package-lock.json/
