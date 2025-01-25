@@ -23,12 +23,12 @@ const Settings = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Personal Information</Text>
-      <Text style={styles.text}>Username: {personalInfo.username}</Text>
-      <Text style={styles.text}>Full Name: {personalInfo.fullName}</Text>
-      <Text style={styles.text}>Email: {personalInfo.email}</Text>
-      <Text style={styles.text}>Date of Birth: {personalInfo.dob}</Text>
-      <Text style={styles.text}>Contact Number: {personalInfo.contactNumber}</Text>
-      <Text style={styles.text}>Location: {personalInfo.location}</Text>
+      <Text style={styles.text}>{`Username: ${personalInfo.username}`}</Text>
+      <Text style={styles.text}>{`Full Name: ${personalInfo.fullName}`}</Text>
+      <Text style={styles.text}>{`Email: ${personalInfo.email}`}</Text>
+      <Text style={styles.text}>{`Date of Birth: ${personalInfo.dob}`}</Text>
+      <Text style={styles.text}>{`Contact Number: ${personalInfo.contactNumber}`}</Text>
+      <Text style={styles.text}>{`Location: ${personalInfo.location}`}</Text>
     </View>
   );
 };
