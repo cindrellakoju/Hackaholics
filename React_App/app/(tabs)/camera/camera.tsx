@@ -1,4 +1,4 @@
-import PhotoPreviewSection from '@/components/PhotoPreviewSection';
+import PhotoPreviewSection from '@/components/navigation/PhotoPreviewSection';
 import { AntDesign } from '@expo/vector-icons';
 import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
 import { useRef, useState } from 'react';
@@ -8,7 +8,7 @@ export default function Camera() {
   const [facing, setFacing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
   const [photo, setPhoto] = useState<any>(null);
-  const cameraRef = useRef<CameraView | null>(null);
+  const cameraRef = useRef<CameraView | null>(null); // reference for future scanning and detecting
 
   if (!permission) {
     // Camera permissions are still loading.
