@@ -1,164 +1,153 @@
-import React, { useState } from "react";
-import { View, Text, Image, FlatList, StyleSheet, Dimensions, TouchableOpacity, Modal } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
-import ItemDetail from "./ItemDetail";
-import AddItemForm from "./AddItemForm"
+import React from 'react';
+import { View, Text, Image, StyleSheet, ScrollView, FlatList, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons'; // Import the icon library
+import { useNavigation } from '@react-navigation/native'; // Import navigation hook
+import { StackNavigationProp } from '@react-navigation/stack'; // Import navigation prop type
+import { RootStackParamList } from './type'; // Import navigation types
 
-const dummyData = [
-    {
-      id: "1",
-      title: "Beautiful Sunset",
-      thumbnail: "https://via.placeholder.com/150/FF7F50",
-      description: "A breathtaking sunset at the beach.",
-      images: [
-        "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQiX1vaoWWbfHRBS-iVYzwFNgUJ7WcjzO_GBXufRHoRW4bi9YLS-YZnZmBx1CXzQSGXkIJEZozD_P-YOUrijreo5Q",
-        "https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg",
-      ],
-      videoLink: "https://www.example.com/video1",
-      username: "johndoe",
-    },
-    {
-      id: "2",
-      title: "Mountain View",
-      thumbnail: "https://via.placeholder.com/150/6495ED",
-      description: "A beautiful view from the mountain top.",
-      images: [
-        "https://via.placeholder.com/500/6495ED",
-        "https://via.placeholder.com/500/228B22",
-        "https://via.placeholder.com/500/DC143C",
-      ],
-      videoLink: "https://www.example.com/video2",
-      username: "janedoe", // Added username
-    },
-    {
-      id: "3",
-      title: "Forest Adventure",
-      thumbnail: "https://via.placeholder.com/150/228B22",
-      description: "Explore the lush green forests.",
-      images: [
-        "https://via.placeholder.com/500/228B22",
-        "https://via.placeholder.com/500/DC143C",
-        "https://via.placeholder.com/500/6495ED",
-      ],
-      videoLink: "https://www.example.com/video3",
-      username: "naturelover", // Added username
-    },
-  ];
-  
+interface Work {
+  imageUri: string;
+  title: string;
+}
 
-const ExplorePage: React.FC = () => {
-  const [likedItems, setLikedItems] = useState<{ [key: string]: boolean }>({});
-  const [selectedItem, setSelectedItem] = useState<any>(null);
-  const [isFormVisible, setIsFormVisible] = useState(false); // Track form visibility
+const works: Work[] = [
+  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'Nature' },
+  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'My Art' },
+  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'People' },
+  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'Nature' },
+  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'My Art' },
+  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'People' },
+];
 
-  const toggleLike = (id: string) => {
-    setLikedItems((prev) => ({ ...prev, [id]: !prev[id] }));
+const UserInfo = () => {
+  // Define navigation type for this screen
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'UserInfo'>>();
+
+  const handleSettingsPress = () => {
+    navigation.dispatch(StackActions.push('Settings')); // Navigate to Settings screen
   };
 
-  const renderThumbnail = ({ item }: { item: any }) => (
-    <TouchableOpacity
-      style={styles.thumbnailContainer}
-      onPress={() => setSelectedItem(item)}
-    >
-      <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
-      <TouchableOpacity style={styles.heartIcon} onPress={() => toggleLike(item.id)}>
-        <Icon name={likedItems[item.id] ? "heart" : "heart-outline"} size={24} color={likedItems[item.id] ? "red" : "#FFF"} />
-      </TouchableOpacity>
-      <Text style={styles.thumbnailTitle}>{item.title}</Text>
-    </TouchableOpacity>
-  );
-
   return (
-    <View style={styles.container}>
-      {selectedItem ? (
-        <ItemDetail item={selectedItem} />
-      ) : (
-        <>
-          <FlatList
-            data={dummyData}
-            renderItem={renderThumbnail}
-            keyExtractor={(item) => item.id}
-            numColumns={2}
-            showsVerticalScrollIndicator={false}
-          />
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => setIsFormVisible(true)} // Open form modal
-          >
-            <Icon name="add" size={30} color="#FFF" />
-          </TouchableOpacity>
-          <Modal
-            visible={isFormVisible}
-            transparent={false}
-            animationType="slide"
-            onRequestClose={() => setIsFormVisible(false)} // Close modal on request
-          >
-            <AddItemForm
-              onClose={() => setIsFormVisible(false)} // Close modal on form submission or cancel
-            />
-          </Modal>
-        </>
-      )}
-    </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      {/* Settings Button at the top right */}
+      <View style={styles.settingsContainer}>
+        <TouchableOpacity onPress={handleSettingsPress}>
+          <Icon name="settings-outline" size={30} color="black" paddingRight={10} /> {/* Settings icon */}
+        </TouchableOpacity>
+      </View>
+
+      {/* Header Section */}
+      <View style={styles.header}>
+        <Image
+          source={{ uri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg' }} // Replace with actual image URL
+          style={styles.profileImage}
+        />
+        <Text style={styles.name}>Caroline Steele</Text>
+        <Text style={styles.subtitle}>Photographer and Artist</Text>
+        <Text style={styles.description}>
+          Hi, my name is Carol and I love photography! It's my greatest passion in life.
+        </Text>
+      </View>
+
+      {/* Stats Section */}
+      <View style={styles.statsContainer}>
+        <View style={styles.statItem}>
+          <Text style={styles.statNumber}>❤️ 15k </Text>
+        </View>
+      </View>
+
+      {/* My Works Section */}
+      <Text style={styles.sectionTitle}>My Crafts</Text>
+
+      <FlatList
+        data={works}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.workItem}>
+            <Image source={{ uri: item.imageUri }} style={styles.workImage} />
+            <Text style={styles.imageTitle}>{item.title}</Text>
+          </View>
+        )}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.worksContainer}
+      />
+    </ScrollView>
   );
 };
 
+// Styles (same as in your code)
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#F9F9F9",
-    paddingHorizontal: 8,
-    paddingTop: 10,
+    padding: 30,
+    paddingTop: 90,
+    backgroundColor: '#fff',
   },
-  thumbnailContainer: {
-    flex: 1,
-    margin: 8,
-    backgroundColor: "#FFF",
-    borderRadius: 12,
-    overflow: "hidden",
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    position: "relative",
-  },
-  thumbnail: {
-    width: "100%",
-    height: Dimensions.get("window").width / 2.5,
-    resizeMode: "cover",
-  },
-  heartIcon: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    borderRadius: 20,
-    padding: 5,
-  },
-  thumbnailTitle: {
-    padding: 8,
-    fontSize: 14,
-    color: "#333",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  addButton: {
-    position: "absolute",
-    bottom: 20,
+  settingsContainer: {
+    position: 'absolute',
+    top: 40,
     right: 20,
-    backgroundColor: "#007BFF",
-    borderRadius: 30,
-    width: 60,
-    height: 60,
-    justifyContent: "center",
-    alignItems: "center",
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
+    zIndex: 1,
+  },
+  header: {
+    alignItems: 'center',
+  },
+  profileImage: {
+    width: 140,
+    height: 140,
+    borderRadius: 80,
+    marginBottom: 10,
+  },
+  name: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: 'gray',
+  },
+  description: {
+    textAlign: 'center',
+    color: 'gray',
+    marginTop: 10,
+  },
+  statsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
+  },
+  statItem: {
+    alignItems: 'center',
+  },
+  statNumber: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 30,
+  },
+  worksContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  workItem: {
+    width: 150,
+    marginRight: 10,
+  },
+  workImage: {
+    width: 150,
+    height: 220,
+    borderRadius: 10,
+  },
+  imageTitle: {
+    marginTop: 5,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'gray',
   },
 });
 
-export default ExplorePage;
+export default UserInfo;
