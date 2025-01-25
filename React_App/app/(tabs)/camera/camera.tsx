@@ -58,8 +58,9 @@ export default function Camera() {
       mediaTypes: 'images',  // Use 'image' directly instead of MediaTypeOptions.Images
       allowsEditing: false,
       aspect: [4, 3],
-      quality: 1,
+      quality: 2,
     });
+    console.log(result);
 
     if (!result.canceled) {
       setPhoto(result);
@@ -83,12 +84,12 @@ export default function Camera() {
           </TouchableOpacity>
         </View>
       </CameraView>
+      {photo && photo.uri && (
+    <View style={styles.imageContainer}>
+    <Image source={{ uri: photo.uri }} style={styles.selectedImage} />
+  </View>
+)}
 
-      {photo && (
-        <View style={styles.imageContainer}>
-          <Image source={{ uri: photo.uri }} style={styles.selectedImage} />
-        </View>
-      )}
     </View>
   );
 }
