@@ -4,6 +4,8 @@ import Icon from 'react-native-vector-icons/Ionicons'; // Import the icon librar
 import { useNavigation } from '@react-navigation/native'; // Import navigation hook
 import { StackNavigationProp } from '@react-navigation/stack'; // Import navigation prop type
 import { RootStackParamList } from './type'; // Import navigation types
+import { StackActions } from '@react-navigation/stack';
+
 
 interface Work {
   imageUri: string;
@@ -31,9 +33,9 @@ const UserInfo = () => {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Settings Button at the top right */}
       <View style={styles.settingsContainer}>
-        <TouchableOpacity onPress={handleSettingsPress}>
-          <Icon name="settings-outline" size={30} color="black" paddingRight={10} /> {/* Settings icon */}
-        </TouchableOpacity>
+      <TouchableOpacity onPress={handleSettingsPress} style={{ paddingRight: 10 }}>
+  <Icon name="settings-outline" size={30} color="black" />
+</TouchableOpacity>
       </View>
 
       {/* Header Section */}
