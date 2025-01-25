@@ -2,7 +2,7 @@ import PhotoPreviewSection from '@/components/navigation/PhotoPreviewSection';
 import { AntDesign } from '@expo/vector-icons';
 import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
 import { useRef, useState } from 'react';
-import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';  // Import ImagePicker
 
 export default function Camera() {
@@ -46,7 +46,6 @@ export default function Camera() {
 
   const handlePickImage = async () => {
     // Request media library permissions
-    // Once the user has granted the permission, the state of the component will be updated and the image picker will be launched.
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
       alert('Sorry, we need camera roll permissions to pick an image!');
@@ -55,7 +54,7 @@ export default function Camera() {
 
     // Launch the image picker to select an image
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: 'images',  // Use 'image' directly instead of MediaTypeOptions.Images
+      mediaTypes: 'images',
       allowsEditing: false,
       aspect: [4, 3],
       quality: 2,
@@ -67,7 +66,63 @@ export default function Camera() {
     }
   };
 
-  if (photo) return <PhotoPreviewSection photo={photo} handleRetakePhoto={handleRetakePhoto} />;
+  const handleConfirmPhoto = async () => {
+    if (!photo) return;
+
+    // Prepare the image data
+    const formData = new FormData();
+    formData.append('file', {
+      uri: photo.uri,
+      name: 'photo.jpg', // You can customize the filename
+      type: 'image/jpeg', // Adjust the MIME type based on the image format
+    });
+
+    try {
+      const response = await fetch('http://192.168.31.99:5000/predict', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to upload image');
+      }
+
+      const data = await response.json();
+      console.log('API response:', data);
+
+      // Handle the response from the API
+      // Example: Navigate to another screen with the response data
+      // navigation.navigate('NextPage', { data });
+
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Failed to upload image');
+    }
+  };
+
+  const handleDiscardPhoto = () => {
+    // Discard the photo and reset state
+    setPhoto(null);
+  };
+
+  if (photo) {
+    return (
+      <View style={styles.container}>
+        <PhotoPreviewSection photo={photo} />
+        <View style={styles.actionsContainer}>
+          <TouchableOpacity style={styles.actionButton} onPress={handleConfirmPhoto}>
+            <AntDesign name="checkcircle" size={44} color="green" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.actionButton} onPress={handleDiscardPhoto}>
+            <AntDesign name="closecircle" size={44} color="red" />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -84,15 +139,10 @@ export default function Camera() {
           </TouchableOpacity>
         </View>
       </CameraView>
-      {photo && photo.uri && (
-    <View style={styles.imageContainer}>
-    <Image source={{ uri: photo.uri }} style={styles.selectedImage} />
-  </View>
-)}
-
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -115,16 +165,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'gray',
     borderRadius: 10,
   },
-  imageContainer: {
+  actionsContainer: {
+    flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
     marginTop: 20,
   },
-  selectedImage: {
-    width: 300,
-    height: 300,
-    resizeMode: 'cover',
-    borderRadius: 10,
+  actionButton: {
+    margin: 20,
   },
   text: {
     fontSize: 24,

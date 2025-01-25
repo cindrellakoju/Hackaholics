@@ -1,35 +1,12 @@
-// import React from "react";
-// import { SafeAreaView } from "react-native-safe-area-context";
-
-// const PhotoPreviewSession =({
-//     photo,
-//     handleRetakePhoto
-// }:{
-//     photo:string;
-//     handleRetakePhoto: () => void;
-// }) =>(
-//     <SafeAreaView>
-//         <View>
-//             <Image>
-
-//             </Image>
-//         </View>
-//     </SafeAreaView>
-// );
-
-// export default PhotoPreviewSession
-
 import { Fontisto } from '@expo/vector-icons';
 import { CameraCapturedPicture } from 'expo-camera';
 import React from 'react'
 import { TouchableOpacity, SafeAreaView, Image, StyleSheet, View } from 'react-native';
 
 const PhotoPreviewSection = ({
-    photo,
-    handleRetakePhoto
+    photo
 }: {
     photo: CameraCapturedPicture;
-    handleRetakePhoto: () => void;
 }) => (
     <SafeAreaView style={styles.container}>
         <View style={styles.box}>
@@ -39,11 +16,6 @@ const PhotoPreviewSection = ({
             />
         </View>
 
-        <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={handleRetakePhoto}>
-                <Fontisto name='trash' size={36} color='black' />
-            </TouchableOpacity>
-        </View>
     </SafeAreaView>
 );
 

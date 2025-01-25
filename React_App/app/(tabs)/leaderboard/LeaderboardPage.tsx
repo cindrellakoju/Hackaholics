@@ -19,7 +19,7 @@ const LeaderboardPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:3000/getUsersWithLikes'); // Replace with actual API endpoint
+        const response = await fetch('http://192.168.31.99:3000/getUsersWithLikes'); // Replace with actual API endpoint
         const data = await response.json();
         console.log(data);
         if (data.success) {

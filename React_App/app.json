@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "extra": {
-      "BASE_URL": "http://localhost:3000"
+      "BASE_URL": "http://192.168.31.99:3000"
     },
     "ios": {
       "supportsTablet": true
@@ -23,7 +23,6 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-router",

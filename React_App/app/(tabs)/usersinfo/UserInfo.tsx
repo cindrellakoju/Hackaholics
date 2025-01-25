@@ -19,7 +19,6 @@ const works: Work[] = [
 
 const UserInfo = () => {
   const [showSettings, setShowSettings] = useState(false);
-  // const { user } = useAuth();
 
   const handleSettingsPress = () => {
     setShowSettings(prevState => !prevState); // Toggle the visibility of the Settings component

@@ -25,7 +25,9 @@ const ExplorePage: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<any>(null); // Track selected item
   const [isFormVisible, setIsFormVisible] = useState(false); // Track form visibility
 
-  const BASE_URL = Constants.manifest?.extra?.BASE_URL; // Access BASE_URL from manifest
+  // const BASE_URL = Constants.manifest?.extra?.BASE_URL; // Access BASE_URL from manifest
+  const BASE_URL = process.env.BASE_URL || 'http://192.168.31.99:3000';  // Fallback to localhost for local development
+
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -59,7 +61,7 @@ const ExplorePage: React.FC = () => {
       {item?.images?.[0]?.image_url ? (
         <>
         <Image
-          source={{ uri: `http://localhost:3000/uploads/${item.images[0].image_url}` }}
+          source={{ uri: `http://192.168.31.99:3000/uploads/${item.images[0].image_url}` }}
           style={styles.thumbnail}
         />
         </>

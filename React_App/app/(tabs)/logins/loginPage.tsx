@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // For icons
 import Logo from "../images/logo.png";
-import AsyncStorage from '@react-native-async-storage/async-storage'; // AsyncStorage for persistent login
 
 type LoginPageProps = {
   onLogin?: () => void; // Define onLogin as an optional prop
@@ -14,27 +13,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false); // Toggle password visibility
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
-
-  useEffect(() => {
-    checkLoginStatus();
-  }, []);
-
-  const checkLoginStatus = async () => {
-    try {
-      const token = await AsyncStorage.getItem('authToken');
-      if (token) {
-        const expirationDate = await AsyncStorage.getItem('tokenExpirationDate');
-        if (expirationDate && new Date(expirationDate) > new Date()) {
-          setIsLoggedIn(true); // Keep user logged in
-        } else {
-          await AsyncStorage.removeItem('authToken'); // Remove expired token
-        }
-      }
-    } catch (error) {
-      console.error('Error checking login status:', error);
-    }
-  };
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -42,24 +20,17 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       return;
     }
     try {
-      console.log("Attempting login");
-      const response = await fetch(`http://localhost:3000/api/signin`, {
+      console.log("ddgsgd")
+      const response = await fetch(`http://192.168.31.99:3000/api/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
-      const data = await response.json();
+      const data = await response.json();      
       if (response.ok) {
-        // Store the token and expiration date
-        await AsyncStorage.setItem('authToken', data.token);
-        const expirationDate = new Date();
-        expirationDate.setHours(expirationDate.getHours() + 24); // Set expiration to 24 hours from now
-        await AsyncStorage.setItem('tokenExpirationDate', expirationDate.toString());
-
-        // Alert.alert('Success', `Welcome back, ${data.user.name}!`);
-        setIsLoggedIn(true); // Set the user as logged in
+        Alert.alert('Success', `Welcome back, ${data.user.name}!`);
         if (onLogin) {
           onLogin(); // Call the onLogin callback if provided
         }
@@ -72,27 +43,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     }
   };
 
-  const handleLogout = async () => {
-    await AsyncStorage.removeItem('authToken');
-    await AsyncStorage.removeItem('tokenExpirationDate');
-    setIsLoggedIn(false); // Update the UI to reflect logout
-    Alert.alert('Logged out', 'You have been logged out successfully.');
-  };
-
   const handleSignUp = () => {
     Alert.alert('Sign Up', 'Redirecting to sign-up page...');
   };
-
-  if (isLoggedIn) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcomeText}>Welcome back!</Text>
-        <TouchableOpacity style={styles.button} onPress={handleLogout}>
-          <Text style={styles.buttonText}>Logout</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
@@ -211,12 +164,6 @@ const styles = StyleSheet.create({
     color: '#007BFF',
     fontWeight: 'bold',
     textDecorationLine: 'underline',
-  },
-  welcomeText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#082317',
-    marginBottom: 20,
   },
 });
 

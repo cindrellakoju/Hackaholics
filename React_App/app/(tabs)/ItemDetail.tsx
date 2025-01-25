@@ -6,7 +6,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 interface ItemDetailProps {
   item: {
     title: string;
-    images: string[];
+    images: { image_url: string }[]; // Updated to reflect the correct data structure
     videoLink: string;
     description: string;
     username: string;
@@ -44,12 +44,12 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ item }) => {
       {/* Title */}
       <Text style={styles.title}>{item.title}</Text>
 
-      {/* Images (55% Height and 80% Width) */}
+      {/* Images */}
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.imageContainer}>
-        {item.images.map((image: string, index: number) => (
+        {item.images.map((image, index) => (
           <Image
             key={index}
-            source={{ uri: image }}
+            source={{ uri: `http://192.168.31.99:3000/uploads/${image.image_url} `}} 
             style={{
               width: screenWidth * 0.8, // 80% of the screen width
               height: screenHeight * 0.55, // 55% of the screen height
