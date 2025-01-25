@@ -7,8 +7,8 @@ import LoginPage from "./(tabs)/logins/loginPage";
 const App: React.FC = () => {
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: "flex-end" }}>
-      {/* <BottomNavBar /> */}
-      <LoginPage/>
+      <BottomNavBar />
+      {/* <LoginPage/> */}
     </SafeAreaView>
   );
 };

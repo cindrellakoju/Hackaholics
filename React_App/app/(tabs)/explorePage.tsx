@@ -3,6 +3,7 @@ import { View, Text, Image, FlatList, StyleSheet, Dimensions, TouchableOpacity, 
 import Icon from "react-native-vector-icons/Ionicons";
 import ItemDetail from "./ItemDetail";
 import AddItemForm from "./AddItemForm"
+import axios from "axios";
 
 const dummyData = [
     {
