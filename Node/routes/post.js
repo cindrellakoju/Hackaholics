@@ -132,4 +132,31 @@ router.get('/getAllPosts', async (req, res) => {
 });
 
 
+router.get('/getPost/:post_id', async (req, res) => {
+  const { post_id } = req.params;
+
+  try {
+    const postQuery = `
+      SELECT p.id, p.title, p.description, p.user_id, p.like_count, p.likes, 
+             json_agg(i.image_url) AS images
+      FROM posts p
+      LEFT JOIN images i ON p.id = i.post_id
+      WHERE p.id = $1
+      GROUP BY p.id
+    `;
+    
+    const postResult = await pool.query(postQuery, [post_id]);
+
+    if (postResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    res.status(200).json({ data: postResult.rows[0] });
+  } catch (err) {
+    console.error('Error fetching post details:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 module.exports = router;
