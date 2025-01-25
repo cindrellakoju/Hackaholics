@@ -3,10 +3,11 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import ExplorePage from "./explorePage";
 import BooksPage from "./books/BookPage";
-import LeaderboardPage from "./leaderboard/LeaderboardPage"; // Import LeaderboardPage
+import LeaderboardPage from "./leaderboard/LeaderboardPage";
+import UserInfo from "./usersinfo/UserInfo"
 
 const BottomNavBar: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("Explore"); // Default tab is "Explore"
+  const [activeTab, setActiveTab] = useState("Explore");
 
   const tabs = [
     { name: "Explore", icon: "compass-outline" },
@@ -18,14 +19,15 @@ const BottomNavBar: React.FC = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* Conditional rendering based on activeTab */}
       <View style={{ flex: 1 }}>
         {activeTab === "Explore" && <ExplorePage />}
         {activeTab === "Books" && <BooksPage />}
         {activeTab === "Leaderboard" && <LeaderboardPage />}
+        {activeTab === "User Info" && <UserInfo />} {/* Show UserInfo component */}
         {activeTab !== "Explore" &&
           activeTab !== "Books" &&
-          activeTab !== "Leaderboard" && (
+          activeTab !== "Leaderboard" &&
+          activeTab !== "User Info" && (
             <View style={styles.placeholder}>
               <Text style={styles.placeholderText}>{activeTab} Page</Text>
             </View>
