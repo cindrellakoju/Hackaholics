@@ -40,6 +40,20 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
         }}
       />
-    </Tabs>
+     <Tabs.Screen
+  name="camera"
+  options={{
+    title: 'Camera',
+    tabBarIcon: ({ color, focused }) => (
+      <IconSymbol 
+        size={28} 
+        name ={focused ? 'camera' : 'camera.fill'} 
+        color={color} 
+      />
+    ),
+  }}
+/>
+
+</Tabs>
   );
 }
