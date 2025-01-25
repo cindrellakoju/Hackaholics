@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native";
 import BottomNavBar from "./(tabs)/navbar";
 import LoginPage from "./(tabs)/logins/loginPage";
+import ClickeClassification from "./(tabs)/camera/clickedImageInfo";
 
 const App: React.FC = () => {
   // State to track user login status
@@ -13,13 +14,14 @@ const App: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: "flex-end" }}>
-      {isLoggedIn ? (
-        <BottomNavBar />
-      ) : (
-        <LoginPage onLogin={handleLogin} />
-      )}
-    </SafeAreaView>
+    // <SafeAreaView style={{ flex: 1, justifyContent: "flex-end" }}>
+    //   {isLoggedIn ? (
+    //     <BottomNavBar />
+    //   ) : (
+    //     <LoginPage onLogin={handleLogin} />
+    //   )}
+    // </SafeAreaView>
+    <ClickeClassification/>
   );
 };
 
