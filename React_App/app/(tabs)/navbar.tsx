@@ -4,7 +4,9 @@ import Icon from "react-native-vector-icons/Ionicons";
 import ExplorePage from "./explorePage";
 import BooksPage from "./books/BookPage";
 import LeaderboardPage from "./leaderboard/LeaderboardPage";
-import UserInfo from "./usersinfo/UserInfo"
+import UserInfo from "./usersinfo/UserInfo";
+// import CameraPage from "./camera/camerascreen";
+import Camera from "./camera/camera";
 
 const BottomNavBar: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Explore");
@@ -23,11 +25,13 @@ const BottomNavBar: React.FC = () => {
         {activeTab === "Explore" && <ExplorePage />}
         {activeTab === "Books" && <BooksPage />}
         {activeTab === "Leaderboard" && <LeaderboardPage />}
-        {activeTab === "User Info" && <UserInfo />} {/* Show UserInfo component */}
+        {activeTab === "User Info" && <UserInfo />}
+        {activeTab === "Camera" && <Camera />} {/* Render CameraPage on Camera Tab */}
         {activeTab !== "Explore" &&
           activeTab !== "Books" &&
           activeTab !== "Leaderboard" &&
-          activeTab !== "User Info" && (
+          activeTab !== "User Info" &&
+          activeTab !== "Camera" && (
             <View style={styles.placeholder}>
               <Text style={styles.placeholderText}>{activeTab} Page</Text>
             </View>
