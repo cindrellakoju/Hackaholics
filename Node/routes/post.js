@@ -99,5 +99,37 @@ router.post('/likePost', async (req, res) => {
   }
 });
 
+router.get('/getAllPosts', async (req, res) => {
+  try {
+    const postsQuery = `
+      SELECT 
+        p.id as post_id, 
+        p.title, 
+        p.description, 
+        p.user_id, 
+        p.likes, 
+        p.like_count, 
+        json_agg(
+          json_build_object('image_id', i.id, 'image_url', i.image_url)
+        ) as images 
+      FROM posts p
+      LEFT JOIN images i ON p.id = i.post_id
+      GROUP BY p.id
+      ORDER BY p.id DESC;
+    `;
+
+    const result = await pool.query(postsQuery);
+    const posts = result.rows;
+
+    res.status(200).json({
+      success: true,
+      data: posts,
+    });
+  } catch (err) {
+    console.error('Error retrieving posts:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 module.exports = router;
