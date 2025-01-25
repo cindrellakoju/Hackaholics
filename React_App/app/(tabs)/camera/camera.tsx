@@ -46,6 +46,7 @@ export default function Camera() {
 
   const handlePickImage = async () => {
     // Request media library permissions
+    // Once the user has granted the permission, the state of the component will be updated and the image picker will be launched.
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
       alert('Sorry, we need camera roll permissions to pick an image!');
