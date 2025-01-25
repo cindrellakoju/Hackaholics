@@ -42,8 +42,8 @@ const UserInfo = () => {
             source={{ uri: 'http://192.168.31.99:3000/uploads/default.png' }} // Replace with actual image URL
             style={styles.profileImage}
           />
-          <Text style={styles.name}>Caroline Steele</Text>
-          <Text style={styles.subtitle}>Photographer and Artist</Text>
+          <Text style={styles.name}>Aashish Chakradhar</Text>
+          <Text style={styles.subtitle}>Socialist And Environmentalist</Text>
           <Text style={styles.description}>
             Hi, my name is Aashish. I am currently working on project to make the waste clean and world a better place.
           </Text>
