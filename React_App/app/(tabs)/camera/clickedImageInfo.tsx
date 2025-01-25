@@ -12,27 +12,20 @@ import {
 } from "react-native";
 import { WebView } from "react-native-webview"; // Import WebView
 
-function ClickeClassification() {
+function ClickeClassification({ classification }) {
   const [isModalVisible, setModalVisible] = useState(null); // Modal state can be null or a category (causes, effect, prevention)
   const [isVideoVisible, setVideoVisible] = useState(false); // State to handle video visibility
 
-  const classificationType = "Sneaker";
-
-  // Video URLs for different categories
   const causesVideos = [
     { id: 1, title: "Cause Video 1", videoUrl: "https://www.youtube.com/embed/9UKCv9T_rIo" },
-    { id: 2, title: "Cause Video 2", videoUrl: "https://www.youtube.com/embed/9UKCv9T_rIo" },
-    { id: 3, title: "Cause Video 3", videoUrl: "https://www.youtube.com/embed/9UKCv9T_rIo" },
   ];
 
   const effectVideos = [
     { id: 1, title: "Effect Video 1", videoUrl: "https://www.youtube.com/embed/9UKCv9T_rIo" },
-    { id: 2, title: "Effect Video 2", videoUrl: "https://www.youtube.com/embed/9UKCv9T_rIo" },
   ];
 
   const preventionVideos = [
     { id: 1, title: "Prevention Video 1", videoUrl: "https://www.youtube.com/embed/9UKCv9T_rIo" },
-    { id: 2, title: "Prevention Video 2", videoUrl: "https://www.youtube.com/embed/9UKCv9T_rIo" },
   ];
 
   // Button handlers
@@ -57,7 +50,7 @@ function ClickeClassification() {
       {/* Display Classification */}
       <Text style={styles.classificationText}>
         Classification Type:{" "}
-        <Text style={styles.classificationType}>{classificationType}</Text>
+        <Text style={styles.classificationType}>{classification}</Text>
       </Text>
 
       {/* Buttons */}
@@ -231,4 +224,3 @@ const styles = StyleSheet.create({
 });
 
 export default ClickeClassification;
- 

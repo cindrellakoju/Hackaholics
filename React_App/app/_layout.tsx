@@ -14,14 +14,13 @@ const App: React.FC = () => {
   };
 
   return (
-    // <SafeAreaView style={{ flex: 1, justifyContent: "flex-end" }}>
-    //   {isLoggedIn ? (
-    //     <BottomNavBar />
-    //   ) : (
-    //     <LoginPage onLogin={handleLogin} />
-    //   )}
-    // </SafeAreaView>
-    <ClickeClassification/>
+    <SafeAreaView style={{ flex: 1, justifyContent: "flex-end" }}>
+      {isLoggedIn ? (
+        <BottomNavBar />
+      ) : (
+        <LoginPage onLogin={handleLogin} />
+      )}
+    </SafeAreaView>
   );
 };
 

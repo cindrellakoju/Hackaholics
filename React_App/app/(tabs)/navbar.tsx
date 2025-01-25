@@ -26,7 +26,7 @@ const BottomNavBar: React.FC = () => {
         {activeTab === "Books" && <BooksPage />}
         {activeTab === "Leaderboard" && <LeaderboardPage />}
         {activeTab === "User Info" && <UserInfo />}
-        {activeTab === "Camera" && <Camera />} {/* Render CameraPage on Camera Tab */}
+        {activeTab === "Camera" && <Camera />}
         {activeTab !== "Explore" &&
           activeTab !== "Books" &&
           activeTab !== "Leaderboard" &&

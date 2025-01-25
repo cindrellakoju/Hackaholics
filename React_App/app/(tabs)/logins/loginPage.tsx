@@ -21,7 +21,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     }
     try {
       console.log("ddgsgd")
-      const response = await fetch(`http://10.10.10.177:3000/api/signin`, {
+      const response = await fetch(`http://192.168.31.99:3000/api/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

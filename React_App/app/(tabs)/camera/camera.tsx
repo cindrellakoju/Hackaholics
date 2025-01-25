@@ -1,27 +1,36 @@
-import PhotoPreviewSection from '@/components/navigation/PhotoPreviewSection';
-import { AntDesign } from '@expo/vector-icons';
-import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';  // Import ImagePicker
+import { AntDesign } from '@expo/vector-icons';
+import { CameraView, useCameraPermissions, CameraType } from 'expo-camera';
+import * as ImagePicker from 'expo-image-picker';
+import PhotoPreviewSection from '@/components/navigation/PhotoPreviewSection';
+
+// Define ClickeClassification component to display classification
+const ClickeClassification = ({ classification }: { classification: string }) => {
+  return (
+    <View style={styles.classificationContainer}>
+      <Text style={styles.classificationText}>Classification: {classification}</Text>
+    </View>
+  );
+};
 
 export default function Camera() {
   const [facing, setFacing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
   const [photo, setPhoto] = useState<any>(null);
-  const cameraRef = useRef<CameraView | null>(null); // reference for future scanning and detecting
+  const [showSettings, setShowSettings] = useState(false);
+  const [classification, setClassification] = useState<string | null>(null); // Store classification here
+  const cameraRef = useRef<CameraView | null>(null);
 
   if (!permission) {
-    // Camera permissions are still loading.
     return <View />;
   }
 
   if (!permission.granted) {
-    // Camera permissions are not granted yet.
     return (
       <View style={styles.container}>
         <Text style={{ textAlign: 'center' }}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="grant permission" />
+        <Button onPress={requestPermission} title="Grant Permission" />
       </View>
     );
   }
@@ -32,11 +41,7 @@ export default function Camera() {
 
   const handleTakePhoto = async () => {
     if (cameraRef.current) {
-      const options = {
-        quality: 1,
-        base64: true,
-        exif: false,
-      };
+      const options = { quality: 1, base64: true, exif: false };
       const takedPhoto = await cameraRef.current.takePictureAsync(options);
       setPhoto(takedPhoto);
     }
@@ -45,21 +50,18 @@ export default function Camera() {
   const handleRetakePhoto = () => setPhoto(null);
 
   const handlePickImage = async () => {
-    // Request media library permissions
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
       alert('Sorry, we need camera roll permissions to pick an image!');
       return;
     }
 
-    // Launch the image picker to select an image
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: 'images',
       allowsEditing: false,
       aspect: [4, 3],
       quality: 2,
     });
-    console.log(result);
 
     if (!result.canceled) {
       setPhoto(result);
@@ -69,12 +71,11 @@ export default function Camera() {
   const handleConfirmPhoto = async () => {
     if (!photo) return;
 
-    // Prepare the image data
     const formData = new FormData();
     formData.append('file', {
       uri: photo.uri,
-      name: 'photo.jpg', // You can customize the filename
-      type: 'image/jpeg', // Adjust the MIME type based on the image format
+      name: 'photo.jpg',
+      type: 'image/jpeg',
     });
 
     try {
@@ -92,11 +93,6 @@ export default function Camera() {
 
       const data = await response.json();
       console.log('API response:', data);
-
-      // Handle the response from the API
-      // Example: Navigate to another screen with the response data
-      // navigation.navigate('NextPage', { data });
-
     } catch (error) {
       console.error('Error uploading image:', error);
       alert('Failed to upload image');
@@ -104,9 +100,14 @@ export default function Camera() {
   };
 
   const handleDiscardPhoto = () => {
-    // Discard the photo and reset state
     setPhoto(null);
+    setClassification(null); // Reset classification when discarding photo
   };
+
+  // Check if we need to show the classification screen
+  if (classification) {
+    return <ClickeClassification classification={classification} />;
+  }
 
   if (photo) {
     return (
@@ -173,9 +174,13 @@ const styles = StyleSheet.create({
   actionButton: {
     margin: 20,
   },
-  text: {
+  classificationContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  classificationText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
   },
 });

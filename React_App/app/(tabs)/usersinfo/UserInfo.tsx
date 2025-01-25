@@ -9,12 +9,12 @@ interface Work {
 }
 
 const works: Work[] = [
-  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'Nature' },
-  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'My Art' },
-  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'People' },
-  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'Nature' },
-  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'My Art' },
-  { imageUri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg', title: 'People' },
+  { imageUri: 'http://192.168.31.99:3000/uploads/23-1727358604996.jpg', title: 'Pen Vase' },
+  { imageUri: 'http://192.168.31.99:3000/uploads/19-1727356762179.jpg', title: 'Basket' },
+  { imageUri: 'http://192.168.31.99:3000/uploads/18-1727356056530.jpg', title: 'Pig' },
+  { imageUri: 'http://192.168.31.99:3000/uploads/13-1727355193558.jpg', title: 'Lamp' },
+  { imageUri: 'http://192.168.31.99:3000/uploads/16-1727355711516.jpg', title: 'My Art' },
+  { imageUri: 'http://192.168.31.99:3000/uploads/21-1727357263204.jpg', title: 'Flower' },
 ];
 
 const UserInfo = () => {
@@ -39,13 +39,13 @@ const UserInfo = () => {
 
       <View style={styles.header}>
           <Image
-            source={{ uri: 'https://files.worldwildlife.org/wwfcmsprod/images/Tiger_resting_Bandhavgarh_National_Park_India/hero_small/6aofsvaglm_Medium_WW226365.jpg' }} // Replace with actual image URL
+            source={{ uri: 'http://192.168.31.99:3000/uploads/default.png' }} // Replace with actual image URL
             style={styles.profileImage}
           />
           <Text style={styles.name}>Caroline Steele</Text>
           <Text style={styles.subtitle}>Photographer and Artist</Text>
           <Text style={styles.description}>
-            Hi, my name is Carol and I love photography! It's my greatest passion in life.
+            Hi, my name is Aashish. I am currently working on project to make the waste clean and world a better place.
           </Text>
         </View>
 
