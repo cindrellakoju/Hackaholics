@@ -1,8 +1,13 @@
 myenv/
+templates/
+1.keras
+1.png
+model.keras
+test.py
+trained.h5
 images/
 training.py
 main.py
 images.jpg
 training.py
 my_model.keras
-train.h5
