@@ -68,14 +68,6 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ item }) => {
         <Text style={styles.likeCount}>{likeCount} Likes</Text>
       </View>
 
-      {/* Username */}
-      <Text style={styles.username}>Posted by: {item.username}</Text>
-
-      {/* Video Link */}
-      <Text style={styles.videoLink}>
-        <Text style={styles.label}>Video Link: </Text>
-        <Text>{item.videoLink}</Text>
-      </Text>
 
       {/* Description */}
       <Text style={styles.description}>{item.description}</Text>
@@ -86,7 +78,7 @@ const ItemDetail: React.FC<ItemDetailProps> = ({ item }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F9F9F9",
+    backgroundColor: '#c7ecdb',
     padding: 16,
   },
   title: {

@@ -11,19 +11,19 @@ interface PersonalInfo {
 }
 
 const personalInfo: PersonalInfo = {
-  username: 'carol_steele',
-  fullName: 'Caroline Steele',
-  email: 'carol.steele@example.com',
-  dob: '1990-05-12',
-  contactNumber: '+1234567890',
-  location: 'Bandhavgarh, India',
+  username: 'Aashish Chakradhar',
+  fullName: 'Aashish Chakradhar',
+  email: 'johndoe@example.com',
+  dob: '2002-01-15',
+  contactNumber: '9861805864',
+  location: 'Bode, Bhaktapur',
 };
 
 const Settings = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Personal Information</Text>
-      <Text style={styles.text}>{`Username: ${personalInfo.username}`}</Text>
+      {/* <Text style={styles.text}>{`Username: ${personalInfo.username}`}</Text> */}
       <Text style={styles.text}>{`Full Name: ${personalInfo.fullName}`}</Text>
       <Text style={styles.text}>{`Email: ${personalInfo.email}`}</Text>
       <Text style={styles.text}>{`Date of Birth: ${personalInfo.dob}`}</Text>

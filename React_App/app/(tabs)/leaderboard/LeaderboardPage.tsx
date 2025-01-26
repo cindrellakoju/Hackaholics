@@ -73,7 +73,7 @@ const LeaderboardPage: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF",
+    backgroundColor: '#c7ecdb',
     padding: 20,
   },
   title: {

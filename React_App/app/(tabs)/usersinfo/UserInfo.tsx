@@ -12,9 +12,9 @@ const works: Work[] = [
   { imageUri: 'http://192.168.31.99:3000/uploads/23-1727358604996.jpg', title: 'Pen Vase' },
   { imageUri: 'http://192.168.31.99:3000/uploads/19-1727356762179.jpg', title: 'Basket' },
   { imageUri: 'http://192.168.31.99:3000/uploads/18-1727356056530.jpg', title: 'Pig' },
-  { imageUri: 'http://192.168.31.99:3000/uploads/13-1727355193558.jpg', title: 'Lamp' },
-  { imageUri: 'http://192.168.31.99:3000/uploads/16-1727355711516.jpg', title: 'My Art' },
-  { imageUri: 'http://192.168.31.99:3000/uploads/21-1727357263204.jpg', title: 'Flower' },
+  // { imageUri: 'http://192.168.31.99:3000/uploads/13-1727355193558.jpg', title: 'Lamp' },
+  // { imageUri: 'http://192.168.31.99:3000/uploads/16-1727355711516.jpg', title: 'My Art' },
+  // { imageUri: 'http://192.168.31.99:3000/uploads/21-1727357263204.jpg', title: 'Flower' },
 ];
 
 const UserInfo = () => {
@@ -52,7 +52,7 @@ const UserInfo = () => {
         {/* Stats Section */}
         <View style={styles.statsContainer}>
           <View style={styles.statItem}>
-            <Text style={styles.statNumber}>❤️ 15k </Text>
+            <Text style={styles.statNumber}>❤️ 36 </Text>
           </View>
         </View>
 
@@ -80,9 +80,10 @@ const UserInfo = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 30,
     paddingTop: 90,
-    backgroundColor: '#fff',
+    backgroundColor: '#c7ecdb',
   },
   settingsContainer: {
     position: 'absolute', // Absolute positioning to place it in the top-right corner

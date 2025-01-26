@@ -11,22 +11,26 @@ import {
   ScrollView,
 } from "react-native";
 import { WebView } from "react-native-webview"; // Import WebView
+import ImageDetails from "./items"
 
-function ClickeClassification({ classification }) {
+function ClickeClassification() {
   const [isModalVisible, setModalVisible] = useState(null); // Modal state can be null or a category (causes, effect, prevention)
   const [isVideoVisible, setVideoVisible] = useState(false); // State to handle video visibility
+  const [showImageDetails, setShowImageDetails] = useState(false); // State to handle showing the image and classification
 
   const causesVideos = [
-    { id: 1, title: "Cause Video 1", videoUrl: "https://www.youtube.com/embed/9UKCv9T_rIo" },
+    { id: 1, title: "Cause Video 1", videoUrl: "https://youtu.be/ODni_Bey154?si=m6qupcB_ms-5Hkad" },
   ];
 
   const effectVideos = [
-    { id: 1, title: "Effect Video 1", videoUrl: "https://www.youtube.com/embed/9UKCv9T_rIo" },
+    { id: 1, title: "Effect Video 1", videoUrl: "https://youtu.be/CubtcwIZEWc?si=hI_Wppx05V5Oxond" },
   ];
 
   const preventionVideos = [
-    { id: 1, title: "Prevention Video 1", videoUrl: "https://www.youtube.com/embed/9UKCv9T_rIo" },
+    { id: 1, title: "Prevention Video 1", videoUrl: "https://youtu.be/fcatQ_7WuXE?si=qhhJ8h1M19qBqsKP" },
   ];
+
+  const classification = "Disease Classification"; // Replace this with actual dynamic classification data
 
   // Button handlers
   const handleCauses = () => setModalVisible('causes');
@@ -42,10 +46,25 @@ function ClickeClassification({ classification }) {
     setModalVisible(null); // Close the modal when a video is selected
   };
 
+  // Handle image click to show details
+  const handleImageClick = () => {
+    setShowImageDetails(true); // Show the image details page
+  };
+
+  // Close the image details view
+  const closeImageDetails = () => {
+    setShowImageDetails(false); // Hide the image details page
+  };
+
+  if (showImageDetails) {
+    return <ImageDetails imageSource={demo} classification={classification} onClose={closeImageDetails} />;
+  }
+
   return (
     <View style={styles.container}>
       {/* Display Image */}
       <Image source={demo} style={styles.logo} />
+      <Button title="View Image Details" onPress={handleImageClick} color="#3498db" />
 
       {/* Display Classification */}
       <Text style={styles.classificationText}>
@@ -109,7 +128,7 @@ function ClickeClassification({ classification }) {
       {/* Modal for Prevention */}
       <Modal visible={isModalVisible === 'prevention'} animationType="slide" transparent={true}>
         <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>Prevention Videos</Text>
+          <Text style={styles.modalTitle}>Crafts</Text>
           <ScrollView contentContainerStyle={styles.videoGrid}>
             {preventionVideos.map((video) => (
               <TouchableOpacity

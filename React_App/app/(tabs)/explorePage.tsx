@@ -143,7 +143,7 @@ const ExplorePage: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F9F9F9",
+    backgroundColor: '#c7ecdb',
     paddingHorizontal: 8,
     paddingTop: 10,
   },
